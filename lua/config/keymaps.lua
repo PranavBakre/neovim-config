@@ -38,15 +38,12 @@ map({ "n", "i", "v" }, "<D-a>", "<Esc>ggVG", { desc = "Select all" })
 map({ "n", "i" }, "<D-z>", "<Cmd>undo<CR>", { desc = "Undo" })
 map({ "n", "i" }, "<D-S-z>", "<Cmd>redo<CR>", { desc = "Redo" })
 
--- Move to the clicked symbol before requesting its definition.
-map(
-  { "n", "i", "v" },
-  "<D-LeftMouse>",
-  "<LeftMouse><Cmd>lua vim.lsp.buf.definition()<CR>",
-  { desc = "Go to clicked definition" }
-)
-map({ "n", "i", "v" }, "<D-LeftRelease>", "<Nop>")
-map({ "n", "i", "v" }, "<D-LeftDrag>", "<Nop>")
+-- Open web links in files and terminal output, or navigate code symbols.
+map({ "n", "i", "v", "t" }, "<D-LeftMouse>", function()
+  require("local_config.mouse").open()
+end, { desc = "Open clicked link or definition" })
+map({ "n", "i", "v", "t" }, "<D-LeftRelease>", "<Nop>")
+map({ "n", "i", "v", "t" }, "<D-LeftDrag>", "<Nop>")
 map(
   { "n", "i", "v" },
   "<D-M-LeftMouse>",
@@ -83,3 +80,32 @@ end, { force = true })
 vim.api.nvim_create_user_command("ProjectTerminalNext", function()
   require("local_config.terminal_dock").cycle(project_root(), 1)
 end, { force = true })
+
+-- Keep the final screenful visible rather than scrolling into empty space.
+map({ "n", "i", "v", "t" }, "<ScrollWheelDown>", function()
+  if vim.fn.pumvisible() == 1 then
+    return "<ScrollWheelDown>"
+  end
+  local win = vim.fn.getmousepos().winid
+  if win == 0 or not vim.api.nvim_win_is_valid(win) then
+    return "<ScrollWheelDown>"
+  end
+  local at_end = vim.api.nvim_win_call(win, function()
+    local view = vim.fn.winsaveview()
+    local remaining = vim.api.nvim_win_text_height(win, { start_row = view.topline - 1 }).all
+    return remaining - view.skipcol / math.max(1, vim.api.nvim_win_get_width(win)) <= vim.api.nvim_win_get_height(win)
+  end)
+  if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "terminal" then
+    -- Resume shell input after the wheel event reaches the live output.
+    vim.schedule(function()
+      if vim.api.nvim_get_current_win() == win and vim.fn.mode() == "n" then
+        local view = vim.fn.winsaveview()
+        local remaining = vim.api.nvim_win_text_height(win, { start_row = view.topline - 1 }).all
+        if remaining <= vim.api.nvim_win_get_height(win) then
+          vim.cmd.startinsert()
+        end
+      end
+    end)
+  end
+  return at_end and "" or "<ScrollWheelDown>"
+end, { expr = true, desc = "Scroll down within content" })

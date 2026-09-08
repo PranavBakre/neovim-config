@@ -6,6 +6,7 @@ Launch a project in a separate window:
 
 Mouse: click to position the cursor, drag to select, scroll, and drag split borders.
 Pause the mouse over a symbol for 500 ms to see its type and documentation.
+Right-click opens the context menu. Press Cmd+K again to focus an open type popup.
 Cmd+K shows type information at the editing cursor (Normal or Insert mode).
 
 Single-click files in the explorer to open them. Click file names in the top bar to switch.
@@ -19,7 +20,8 @@ Single-click files in the explorer to open them. Click file names in the top bar
 - Cmd+B: toggle file explorer
 - Cmd+W: close file (prompts for unsaved edits)
 - Cmd+backtick / Ctrl+backtick: bottom project terminal (also toggles from terminal input)
-- Cmd+click / F12: go to definition
+- Cmd+click: open an HTTP(S) link in the browser (including terminal output), or go to a code definition
+- F12: go to definition
 - Cmd+Option+click / Cmd+F12: go to implementation
 - Shift+F12: find references
 - Cmd+T: go to workspace symbol
@@ -42,6 +44,9 @@ Terminals share the bottom dock and do not appear in the file-tab bar.
 - Ctrl+backtick: hide/show the selected shell
 
 Switching or hiding terminals keeps their commands running.
+Scrolling up enters Normal mode to browse terminal history. Scrolling back to the
+bottom resumes terminal input; press i to resume immediately.
+Sideways trackpad scrolling is disabled, and downward scrolling stops at the final screenful.
 
 ## Memory saving
 

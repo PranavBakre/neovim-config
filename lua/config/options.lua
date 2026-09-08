@@ -1,4 +1,6 @@
 vim.opt.mouse = "a"
+-- Prevent sideways trackpad drift; one-line steps allow an exact EOF stop.
+vim.opt.mousescroll = "ver:1,hor:0"
 vim.opt.clipboard = "unnamedplus"
 vim.opt.relativenumber = false
 vim.opt.confirm = true
