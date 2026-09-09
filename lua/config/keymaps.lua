@@ -32,7 +32,16 @@ end
 vim.api.nvim_create_user_command("ProjectTerminal", terminal, { desc = "Toggle bottom project terminal", force = true })
 map("v", "<D-c>", '"+y', { desc = "Copy" })
 map("v", "<D-x>", '"+d', { desc = "Cut" })
-map({ "n", "v" }, "<D-v>", '"+p', { desc = "Paste" })
+map({ "n", "v" }, "<D-v>", function()
+  if vim.bo.buftype == "terminal" then
+    -- Enter terminal input before pasting; terminal scrollback is read-only.
+    return "<Esc>i<Cmd>lua vim.api.nvim_paste(vim.fn.getreg('+'), false, -1)<CR>"
+  end
+  return '"+p'
+end, { expr = true, desc = "Paste" })
+map("t", "<D-v>", function()
+  vim.api.nvim_paste(vim.fn.getreg("+"), false, -1)
+end, { desc = "Paste into terminal" })
 map("i", "<D-v>", "<C-r>+", { desc = "Paste" })
 map({ "n", "i", "v" }, "<D-a>", "<Esc>ggVG", { desc = "Select all" })
 map({ "n", "i" }, "<D-z>", "<Cmd>undo<CR>", { desc = "Undo" })
