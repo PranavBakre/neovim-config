@@ -99,11 +99,6 @@ map({ "n", "i", "v", "t" }, "<ScrollWheelDown>", function()
   if win == 0 or not vim.api.nvim_win_is_valid(win) then
     return "<ScrollWheelDown>"
   end
-  local at_end = vim.api.nvim_win_call(win, function()
-    local view = vim.fn.winsaveview()
-    local remaining = vim.api.nvim_win_text_height(win, { start_row = view.topline - 1 }).all
-    return remaining - view.skipcol / math.max(1, vim.api.nvim_win_get_width(win)) <= vim.api.nvim_win_get_height(win)
-  end)
   if vim.bo[vim.api.nvim_win_get_buf(win)].buftype == "terminal" then
     -- Resume shell input after the wheel event reaches the live output.
     vim.schedule(function()
@@ -115,6 +110,14 @@ map({ "n", "i", "v", "t" }, "<ScrollWheelDown>", function()
         end
       end
     end)
+    -- Full-screen terminal apps manage their own scroll position. Always
+    -- deliver their wheel events, even when Neovim's buffer is at its end.
+    return "<ScrollWheelDown>"
   end
+  local at_end = vim.api.nvim_win_call(win, function()
+    local view = vim.fn.winsaveview()
+    local remaining = vim.api.nvim_win_text_height(win, { start_row = view.topline - 1 }).all
+    return remaining - view.skipcol / math.max(1, vim.api.nvim_win_get_width(win)) <= vim.api.nvim_win_get_height(win)
+  end)
   return at_end and "" or "<ScrollWheelDown>"
 end, { expr = true, desc = "Scroll down within content" })

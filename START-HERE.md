@@ -46,7 +46,8 @@ Terminals share the bottom dock and do not appear in the file-tab bar.
 Switching or hiding terminals keeps their commands running.
 Scrolling up enters Normal mode to browse terminal history. Scrolling back to the
 bottom resumes terminal input; press i to resume immediately.
-Sideways trackpad scrolling is disabled, and downward scrolling stops at the final screenful.
+Sideways trackpad scrolling is disabled. Files stop at the final screenful;
+terminals receive normal wheel events so applications can scroll their own content.
 
 ## Memory saving
 
