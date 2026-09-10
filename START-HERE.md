@@ -6,15 +6,17 @@ Launch a project in a separate window:
 
 Mouse: click to position the cursor, drag to select, scroll, and drag split borders.
 Pause the mouse over a symbol for 500 ms to see its type and documentation.
-Right-click opens the context menu. Press Cmd+K again to focus an open type popup.
+Right-click opens the context menu, including Copy Relative Path and Copy Absolute Path
+for the current file or selected explorer entry. Relative paths use the project folder. Press Cmd+K again to focus an open type popup.
 Cmd+K shows type information at the editing cursor (Normal or Insert mode).
 
+Right-click the Files sidebar and choose View Hidden Files to show or hide filtered entries.
 Single-click files in the explorer to open them. Click file names in the top bar to switch.
 
 ## Mac shortcuts (Neovide)
 
 - Cmd+S: save
-- Cmd+P: find file
+- Cmd+P: find file; paste an absolute path, ~/ path, or project-relative path and press Enter. Directory paths open a picker including hidden and ignored files.
 - Cmd+Shift+P: command palette
 - Cmd+Shift+F: search project
 - Cmd+B: toggle file explorer
@@ -70,3 +72,18 @@ Idle shutdown uses Neovim's built-in LSP lifecycle API rather than the older lsp
 
 :Lazy updates editor plugins; :Mason manages language servers and tools.
 Configuration lives in ~/.config/nvim. lazy-lock.json records installed plugin versions.
+
+## Git sidebar
+
+Click the Git icon in the vertical bar on the far left, or press Cmd+Shift+G to focus project changes.
+Click the folder icon to return to the explorer. Changed files display Git status markers.
+
+- Click a file to open it.
+- s: stage the selected file; u: unstage it.
+- d: browse diffs with previews.
+- Cmd+Enter: open LazyGit for commit, branch, and push controls.
+- R: refresh the sidebar; ?: show all available actions.
+
+Click the branch name in the bottom status bar, choose Switch Branch from the
+right-click menu, or press b in the Git sidebar. Search the branch list and press
+Enter to switch. The picker includes local and remote branches.

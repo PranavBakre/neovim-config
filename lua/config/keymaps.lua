@@ -121,3 +121,10 @@ map({ "n", "i", "v", "t" }, "<ScrollWheelDown>", function()
   end)
   return at_end and "" or "<ScrollWheelDown>"
 end, { expr = true, desc = "Scroll down within content" })
+
+map({ "n", "i", "v", "t" }, "<D-S-g>", function()
+  if vim.fn.mode() == "t" then
+    vim.cmd.stopinsert()
+  end
+  require("neo-tree.command").execute({ source = "git_status", action = "focus", dir = project_root() })
+end, { desc = "Source control sidebar" })
